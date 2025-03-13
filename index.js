@@ -26,7 +26,7 @@ app.use(express.json());
 
 //RESTAPI
 app.get('/api/users',(req,res)=>{
-    return res.json(users);
+    return res.json(users.sort((a,b)=> a.id - b.id));
 });
 
 app
