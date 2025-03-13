@@ -1,6 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const users = require("./MOCK_DATA.json");
+const fs = require('fs');
+const { Console } = require('console');
 
 const app = express();
 dotenv.config();
@@ -17,6 +19,8 @@ const PORT = process.env.PORT;
 
 //     return res.send(html);
 // });
+
+app.use(express.urlencoded({extended: false}));
 
 //RESTAPI
 app.get('/api/users',(req,res)=>{
@@ -41,7 +45,11 @@ app
 
 app.post('/api/users',(req,res)=>{
     //TODO : create user by id
-    return res.json({msg: "status pending"});   
+    const body = req.body;
+    users.push({id:users.length+1 ,...body});
+    fs.writeFile('./MOCK_DATA.json',JSON.stringify(users),(err,data)=>{
+        console.log("New user inserted!");
+    });  
 });
 
 
