@@ -23,20 +23,20 @@ app.get('/api/users',(req,res)=>{
     return res.json(users);
 });
 
-app.get('/api/users/:id',(req,res)=>{
+app
+.route('/api/users/:id')
+.get((req, res) => {
     const id = Number(req.params.id);
     console.log(id);
     return res.json(users.find((user) => user.id === id)); 
-});
-
-app.patch('api/users/:id',(req,res)=>{
-    //TODO: Update user by id
-    return res.json({msg: "status pending"});
 })
-
-app.delete('api/users/:id',(req,res)=>{
-    //TODO : Delete user by id
-    return res.json({msg: "status pending"});
+.put((req,res)=>{
+    //TODO : update user by id
+    return res.json({msg:"Status pending"})
+})
+.delete((req,res)=>{
+    //TODO : delete user by id
+    return res.json({msg:"Status pending"})
 })
 
 app.post('/api/users',(req,res)=>{
