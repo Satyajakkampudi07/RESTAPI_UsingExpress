@@ -1,0 +1,63 @@
+const users = require('../MOCK_DATA.json');
+const fs = require('fs');
+
+function getAllUsers(req, res) {
+    return res.json(users.sort((a, b) => a.id - b.id));
+}
+
+function postNewUser(req, res) {
+    const body = req.body;
+    const newUser = { id: users.length + 1, ...body };
+    users.push(newUser);
+    fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err) => {
+        if (err) {
+            return res.status(500).json({ msg: "Server Error" });
+        }
+        return res.json(newUser);
+    });
+}
+
+function getUserById(req, res){
+    const id = Number(req.params.id);
+    console.log(id);
+    return res.json(users.find((user) => user.id === id)); 
+}
+
+function deleteUserById(req,res){
+        const id = Number(req.params.id);
+        const newUserList = users.filter((user)=>user.id !== id)
+        fs.writeFile("./MOCK_DATA.json",JSON.stringify(newUserList), (err)=>{
+            if(err){
+                return res.status(500).json({msg : "Server Error"})
+            }
+            res.status(200).json({msg: "Deleted Successfully"});
+            
+        })
+}
+
+function updateUserById(req, res){
+    const id = Number(req.params.id);
+    const body = req.body;
+    const userIndex = users.findIndex((user) => user.id === id);
+    if (userIndex === -1) {
+        return res.status(404).json({msg: "User not found"});
+    }
+
+    users[userIndex] = { ...users[userIndex], ...body };
+    fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err) => {
+        if (err) {
+            return res.status(500).json({msg: "Server Error"});
+        }
+        return res.status(200).json({msg: "Updated Successfully"});
+    });
+}
+    
+
+
+module.exports = {
+    getAllUsers,
+    postNewUser,
+    getUserById,
+    updateUserById,
+    deleteUserById
+}
